@@ -2,6 +2,10 @@
 import express, { Application } from "express";
 import morgan from "morgan"; //importamos el middleware morgan para que nos muestre peticiones http del servidor
 
+//aplicamos las rutas de nuestro proyecto
+import IndexRoutes from "./routes/index.routes";
+import PostRoutes from "./routes/post.routes";
+
 export class App {
 
     private app: Application; //definimos nuestra variable de aplicación
@@ -10,6 +14,7 @@ export class App {
       this.app = express(); //inicializamos la variable de aplicación
       this.settings(); //inicializamos settings
       this.middlewares(); //inicializamos middlewares
+      this.routes(); //inicializamos routes
     }
 
     settings(){
@@ -21,6 +26,14 @@ export class App {
     middlewares(){
       //ponemos en funcionamiento morgan mediante dev para obtener en consola los POST, GET, PUT o DELETE
       this.app.use(morgan('dev'));
+      //permite a nodejs entender y usar datos de tipo formulario en formato json
+      this.app.use(express.json());
+    }
+
+    //definimos nuestras rutas
+    routes(){
+        this.app.use(IndexRoutes);
+        this.app.use('/post', PostRoutes);
     }
 
     async listen(){
